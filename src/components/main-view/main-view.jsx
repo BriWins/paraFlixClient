@@ -27,7 +27,7 @@ export const MainView = () => {
        
 /* Return user login form if no user is authenticated */
     if (!user) {
-        return <LoginView onLoggedIn={(user) => setUser(user)}/>
+        return <LoginView onLoggedIn={(user) => setUser(user)} />;
     }
 
 /* Displays all details for a single movie upon click*/
