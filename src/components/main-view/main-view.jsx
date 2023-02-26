@@ -1,34 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 
 export const MainView = () => {
-    const [movies, setMovies] = useState([
-        
-        {
-        id: 1,
-        title:"The Sixth Sense",
-        description:" A frightened, withdrawn Philadelphia boy who communicates with spirits seeks the help of a disheartened child psychologist.",
-        image:"https://upload.wikimedia.org/wikipedia/en/a/a4/The_Sixth_Sense_poster.png",
-        release:"1999"
-        },
-        {
-        id: 2,
-        title:"The Sixth Sense",
-        description:" A frightened, withdrawn Philadelphia boy who communicates with spirits seeks the help of a disheartened child psychologist.",
-        image:"https://upload.wikimedia.org/wikipedia/en/a/a4/The_Sixth_Sense_poster.png",
-        release:"1999"
-        },
-        {
-        id: 3,
-        title:"The Sixth Sense",
-        description:" A frightened, withdrawn Philadelphia boy who communicates with spirits seeks the help of a disheartened child psychologist.",
-        image:"https://upload.wikimedia.org/wikipedia/en/a/a4/The_Sixth_Sense_poster.png",
-        release:"1999"
-        }
-    ]);
+    const [movies, setMovies] = useState([]);
 
-    const [ selectedMovie, setSelectedMovie ] = useState(null);
+
+    useEffect(() => {
+        fetch(`https://paraflix.herokuapp.com/movies`)
+        .then((response) => response.json())
+        .then((data) => {
+            const moviesFromApi = data.map((movie) => {
+                return {
+                    id: movie._id,
+                    title: movie.Title,
+                    image: movie.ImagePath,
+                    description: movie.Description
+                }
+            });
+            setMovies(moviesFromApi);
+        });
+    }, []);
+
+    
+     const [ selectedMovie, setSelectedMovie ] = useState(null);
 
     if (selectedMovie) {
         return <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
@@ -44,8 +39,8 @@ export const MainView = () => {
             <MovieCard 
             key={movie.id} 
             movie={movie}
-            onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
+            onMovieClick={(movie) => {
+                setSelectedMovie(movie);
             }}
             />
         ))}
