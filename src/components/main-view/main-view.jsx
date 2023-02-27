@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import { LoginView } from "../login-view/login-view";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
@@ -51,7 +52,9 @@ export const MainView = () => {
             }}
             />
         ))}
-    </div>
+        <button onClick={() => {setUser(null); }}></button>
+    </div>    
   );
+
 };
        
