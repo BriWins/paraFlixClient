@@ -11,7 +11,13 @@ export const MainView = () => {
 
 /* Retrieves database data through deployed app*/
     useEffect(() => {
-        fetch(`https://paraflix.herokuapp.com/movies`)
+        if (!token) {
+            return;
+        }
+
+        fetch(`https://paraflix.herokuapp.com/movies`,{
+            headers: {Authorization: `Bearer ${token}`}
+        })
         .then((response) => response.json())
         .then((data) => {
             const moviesFromApi = data.map((movie) => {
@@ -28,8 +34,14 @@ export const MainView = () => {
        
 /* Return user login form if no user is authenticated */
     if (!user) {
-        return <LoginView onLoggedIn={(user) => setUser(user)} />;
-    }
+        return (
+        <LoginView onLoggedIn={(user, token) => {
+          setUser(user);
+          setToken(token); 
+        }}
+    />
+    );
+}
 
 /* Displays all details for a single movie upon click*/
     if (selectedMovie) {
@@ -52,7 +64,7 @@ export const MainView = () => {
             }}
             />
         ))}
-        <button onClick={() => {setUser(null); }}></button>
+        <button onClick={() => {setUser(null); setToken(null) }}></button>
     </div>    
   );
 
