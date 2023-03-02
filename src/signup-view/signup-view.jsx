@@ -16,7 +16,7 @@ export const SignupView = () => {
             Birthdate: birthdate
         };
 
-        fetch("", {
+        fetch(`https://paraflix.herokuapp.com/users`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
