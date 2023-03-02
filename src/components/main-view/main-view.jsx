@@ -1,39 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import React from "react";
+import { LoginView } from "../login-view/login-view";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 
 export const MainView = () => {
-    const [movies, setMovies] = useState([
-        
-        {
-        id: 1,
-        title:"The Sixth Sense",
-        description:" A frightened, withdrawn Philadelphia boy who communicates with spirits seeks the help of a disheartened child psychologist.",
-        image:"https://upload.wikimedia.org/wikipedia/en/a/a4/The_Sixth_Sense_poster.png",
-        release:"1999"
-        },
-        {
-        id: 2,
-        title:"The Sixth Sense",
-        description:" A frightened, withdrawn Philadelphia boy who communicates with spirits seeks the help of a disheartened child psychologist.",
-        image:"https://upload.wikimedia.org/wikipedia/en/a/a4/The_Sixth_Sense_poster.png",
-        release:"1999"
-        },
-        {
-        id: 3,
-        title:"The Sixth Sense",
-        description:" A frightened, withdrawn Philadelphia boy who communicates with spirits seeks the help of a disheartened child psychologist.",
-        image:"https://upload.wikimedia.org/wikipedia/en/a/a4/The_Sixth_Sense_poster.png",
-        release:"1999"
-        }
-    ]);
-
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = localStorage.getItem("token");
+    const [movies, setMovies] = useState([]);
     const [ selectedMovie, setSelectedMovie ] = useState(null);
+    const [ user, setUser ] = useState(null);
+    const [ token, setToken ] = useState(null);
 
+
+/* Retrieves database data through deployed app*/
+    useEffect(() => {
+        if (!token) {
+            return;
+        }
+
+        fetch(`https://paraflix.herokuapp.com/movies`,{
+            headers: {Authorization: `Bearer ${token}`}
+        })
+        .then((response) => response.json())
+        .then((movies) => {
+            setMovies(movies);
+            });
+        }, [token]);
+       
+/* Return user login form if no user is authenticated */
+    if (!user) {
+        return (
+        <LoginView onLoggedIn={(user, token) => {
+          setUser(user);
+          setToken(token); 
+        }}
+    />
+    );
+}
+
+/* Displays all details for a single movie upon click*/
     if (selectedMovie) {
         return <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
     }
 
+/* No movies are returned if list is empty*/
     if (movies.length === 0) {
         return <div>The list is empty!</div>
     }
@@ -44,12 +55,14 @@ export const MainView = () => {
             <MovieCard 
             key={movie.id} 
             movie={movie}
-            onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
+            onMovieClick={(movie) => {
+                setSelectedMovie(movie);
             }}
             />
         ))}
-    </div>
+        <button onClick={() => {setUser(null); setToken(null); localStorage.clear()}}></button>
+    </div>    
   );
+
 };
        
