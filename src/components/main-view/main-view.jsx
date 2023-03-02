@@ -5,9 +5,13 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 
 export const MainView = () => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = localStorage.getItem("token");
     const [movies, setMovies] = useState([]);
     const [ selectedMovie, setSelectedMovie ] = useState(null);
     const [ user, setUser ] = useState(null);
+    const [ token, setToken ] = useState(null);
+
 
 /* Retrieves database data through deployed app*/
     useEffect(() => {
@@ -19,18 +23,10 @@ export const MainView = () => {
             headers: {Authorization: `Bearer ${token}`}
         })
         .then((response) => response.json())
-        .then((data) => {
-            const moviesFromApi = data.map((movie) => {
-                return {
-                    id: movie._id,
-                    title: movie.Title,
-                    image: movie.ImagePath,
-                    description: movie.Description
-                }
+        .then((movies) => {
+            setMovies(movies);
             });
-            setMovies(moviesFromApi);
-        });
-    }, []);
+        }, [token]);
        
 /* Return user login form if no user is authenticated */
     if (!user) {
@@ -64,7 +60,7 @@ export const MainView = () => {
             }}
             />
         ))}
-        <button onClick={() => {setUser(null); setToken(null) }}></button>
+        <button onClick={() => {setUser(null); setToken(null); localStorage.clear()}}></button>
     </div>    
   );
 
