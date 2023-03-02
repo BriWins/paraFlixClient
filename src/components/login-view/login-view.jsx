@@ -34,7 +34,6 @@ export const LoginView = ( {onLoggedIn} ) => {
         });
 }
     
-
     return (
         <form onSubmit={handleSubmit}>
             <label> Username: 
