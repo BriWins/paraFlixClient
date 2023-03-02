@@ -28,7 +28,7 @@ export const SignupView = () => {
             onChange={(e) => setEmail(e.target.value)}
             required />
         </label>
-        <label> Password:
+        <label> Birthday:
             <input type="date"
             value={birthdate}
             onChange={(e) => setBirthdate(e.target.value)}
