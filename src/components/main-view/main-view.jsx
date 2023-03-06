@@ -35,7 +35,7 @@ export const MainView = () => {
   return (
     
     <BrowserRouter>
-    <NavigationBar onLoggedOut={(user, token) => { setUser(null); setToken(token); }}/>
+    <NavigationBar user={user} onLoggedOut={() => { setUser(null);}}/>
     <Row className="justify-content-md-center">
         <Routes>
         <Route 
@@ -106,31 +106,7 @@ export const MainView = () => {
         </Routes>
         </Row>
     </BrowserRouter>
-    // <BrowserRouter>
-    // <Row >
-    //     <Routes>
-    //     { !user ? (
-    //     <Col md={5} >
-    //        
-    //         <SignupView />
-    //     </Col>
-    //     ) : selectedMovie ? (
-    //         <Col md={8} >
-    //             <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
-    //         </Col>
-    //     ) : movies.length === 0 ? (
-    //         <div>The list is empty!</div>
-    //     ) : (
-    //     <>
-    //        
-    //       ))}
-    //   </>
-    // )}
-     
-    //     <button onClick={() => {setUser(null); setToken(null); localStorage.clear()}}></button>
-    //     </Routes>
-    // </Row>    
-    // </BrowserRouter>
+  
   );
 
 };
